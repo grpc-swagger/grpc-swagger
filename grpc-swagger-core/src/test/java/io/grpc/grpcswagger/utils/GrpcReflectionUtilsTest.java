@@ -11,7 +11,5 @@ public class GrpcReflectionUtilsTest {
     @Test
     public void testParseToMethodDefinition() {
         System.out.println(GrpcReflectionUtils.parseToMethodDefinition("io.grpc.reflection.Test.print"));
-        System.out.println(GrpcReflectionUtils.parseToMethodDefinition("io.grpc.reflection.Test."));
-        System.out.println(GrpcReflectionUtils.parseToMethodDefinition("print"));
     }
 }
