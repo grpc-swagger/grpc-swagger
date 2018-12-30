@@ -1,1 +1,6 @@
 language: java
+
+deploy:
+  provider: heroku
+  api_key:
+    secure: "46d56c51-398c-47b1-9a50-02f2cede1234"
