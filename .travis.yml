@@ -1,5 +1,11 @@
 language: java
 
+addons:
+  sonarcloud:
+    organization: "grpc-swagger"
+    token:
+      secure: $SONAR_TOKEN
+
 deploy:
   provider: heroku
   api_key:
