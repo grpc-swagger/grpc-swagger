@@ -1,0 +1,25 @@
+image: java:8
+
+before_script:
+  - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+  - rm -rf ~/.ssh
+  - eval $(ssh-agent -s)
+  - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+  - echo "deploy to $TARGET_HOST"
+  - mkdir -p ~/.ssh
+  - chmod 700 ~/.ssh
+  - ssh-keyscan $TARGET_HOST >> ~/.ssh/known_hosts
+  - chmod 644 ~/.ssh/known_hosts
+
+stages:
+  - build
+
+build:
+  stage: build
+  script:
+    - ./mvnw -pl grpc-web -am clean install
+    - ssh -v $TARGET_HOST
+    - df -h
+  artifacts:
+    paths:
+      - ./grpc-web/target/grpc-web-0.0.1-SNAPSHOT.jar
