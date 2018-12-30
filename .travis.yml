@@ -7,7 +7,7 @@ addons:
       secure: $SONAR_TOKEN
 
 script:
-  - sonar-scanner
+  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar
 
 deploy:
   provider: heroku
