@@ -11,8 +11,8 @@ import lombok.Data;
  */
 @Data
 public class ServiceConfig {
-    private String configName;
+    private String groupName;
     private List<String> services;
     private Set<String> endpoints;
-    private boolean registerSuccess;
+    private boolean success;
 }

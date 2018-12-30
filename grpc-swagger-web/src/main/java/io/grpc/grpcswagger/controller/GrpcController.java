@@ -94,28 +94,28 @@ public class GrpcController {
     }
 
     @RequestMapping("/listServices")
-    public Result<Object> listRegisteredServices() {
+    public Result<Object> listServices() {
         Map<String, ServiceConfig> successServicesMap = ServiceDiscoveryCenter.getServicesConfigMap().entrySet().stream()
-                .filter(entry -> entry.getValue().isRegisterSuccess())
+                .filter(entry -> entry.getValue().isSuccess())
                 .collect(Collectors.toMap(Entry::getKey, Entry::getValue));
         return Result.success(successServicesMap);
     }
 
     @RequestMapping("/register")
-    public Result<Object> registerService(RegisterParam registerParam) {
+    public Result<Object> registerServices(RegisterParam registerParam) {
 
         List<FileDescriptorSet> fileDescriptorSets = registerByIpAndPort(registerParam.getHost(), registerParam.getPort());
         if (CollectionUtils.isEmpty(fileDescriptorSets)) {
             return error("no services find");
         }
-        if (StringUtils.isBlank(registerParam.getConfigName())) {
-            registerParam.setConfigName(registerParam.getHostAndPortText());
+        if (StringUtils.isBlank(registerParam.getGroupName())) {
+            registerParam.setGroupName(registerParam.getHostAndPortText());
         }
         ServiceConfig serviceConfig = new ServiceConfig();
-        serviceConfig.setConfigName(registerParam.getConfigName());
+        serviceConfig.setGroupName(registerParam.getGroupName());
         serviceConfig.setEndpoints(newConcurrentHashSet(singleton(registerParam.getHostAndPortText())));
         serviceConfig.setServices(getServiceNames(fileDescriptorSets));
-        serviceConfig.setRegisterSuccess(true);
+        serviceConfig.setSuccess(true);
         return Result.success(addServiceConfig(serviceConfig));
     }
 }

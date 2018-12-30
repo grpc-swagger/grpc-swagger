@@ -3,12 +3,10 @@ package io.grpc.grpcswagger.discovery;
 import static com.google.common.collect.Sets.newCopyOnWriteArraySet;
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 
-import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.google.common.collect.Sets;
 import com.google.common.net.HostAndPort;
 
 import io.grpc.grpcswagger.model.ServiceConfig;
@@ -33,12 +31,12 @@ public class ServiceDiscoveryCenter {
     }
 
     public static ServiceConfig addServiceConfig(ServiceConfig serviceConfig) {
-        if (servicesConfigMap.containsKey(serviceConfig.getConfigName())) {
-            ServiceConfig existConfig = servicesConfigMap.get(serviceConfig.getConfigName());
+        if (servicesConfigMap.containsKey(serviceConfig.getGroupName())) {
+            ServiceConfig existConfig = servicesConfigMap.get(serviceConfig.getGroupName());
             existConfig.getEndpoints().addAll(serviceConfig.getEndpoints());
             serviceConfig = existConfig;
         } else {
-            servicesConfigMap.put(serviceConfig.getConfigName(), serviceConfig);
+            servicesConfigMap.put(serviceConfig.getGroupName(), serviceConfig);
         }
         addServiceEndpoint(serviceConfig);
         return serviceConfig;
