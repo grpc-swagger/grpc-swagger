@@ -2,7 +2,7 @@
 
 [sonar](https://sonarcloud.io/dashboard?id=io.grpc%3Agrpc-swagger)
 
-# run with Docker
+# Run with Docker
 ```
 mvn clean package
 docker build -t grpc-swagger .
