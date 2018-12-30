@@ -15,7 +15,7 @@ jobs: # a collection of steps
           # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
           key: circleci-demo-java-spring-{{ checksum "pom.xml" }}
 
-      - run: mvn -pl grpc-swagger-web -am clean install -Dmaven.test.skip=true # gets the project
+      - run: mvn -pl grpc-swagger-core clean install # gets the project
 
       - save_cache: # saves the project dependencies
           paths:
