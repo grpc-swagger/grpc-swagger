@@ -53,6 +53,8 @@ public class GrpcController {
 
     private static final Logger logger = LoggerFactory.getLogger(GrpcController.class);
 
+    private static final String ENDPOINT_PARAM = "endpoint";
+
     @Autowired
     private GrpcProxyService grpcProxyService;
 
@@ -74,16 +76,16 @@ public class GrpcController {
         GrpcMethodDefinition methodDefinition = parseToMethodDefinition(rawFullMethodName);
         JSONObject jsonObject = JSON.parseObject(payload);
         HostAndPort hostAndPort;
-        if (jsonObject.containsKey("serviceUrl")) {
-            hostAndPort = HostAndPort.fromString(jsonObject.getString("serviceUrl"));
-            jsonObject.remove("serviceUrl");
+        if (jsonObject.containsKey(ENDPOINT_PARAM)) {
+            hostAndPort = HostAndPort.fromString(jsonObject.getString(ENDPOINT_PARAM));
+            jsonObject.remove(ENDPOINT_PARAM);
             payload = JSON.toJSONString(jsonObject);
         } else {
             String fullServiceName = methodDefinition.getFullServiceName();
             hostAndPort = ServiceDiscoveryCenter.getTargetHostAdnPost(fullServiceName);
         }
         if (hostAndPort == null) {
-            return Result.success("can't find service url");
+            return Result.success("can't find target endpoint");
         }
 
         Channel channel = ChannelFactory.create(hostAndPort);
