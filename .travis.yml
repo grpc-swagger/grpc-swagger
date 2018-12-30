@@ -6,6 +6,9 @@ addons:
     token:
       secure: $SONAR_TOKEN
 
+script:
+  - sonar-scanner
+
 deploy:
   provider: heroku
   api_key:
