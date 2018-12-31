@@ -1,3 +1,5 @@
+# gRPC-swagger
+
 [![Build Status](https://travis-ci.com/grpc-swagger/grpc-swagger.svg?branch=master)](https://travis-ci.com/grpc-swagger/grpc-swagger)
 
 # What is grpc-swagger
@@ -23,6 +25,8 @@ docker run -p 8080:8080 grpc-swagger
 # Contribute
 Feel free to open an issue or pull request. We will appreciate it!
 [sonar](https://sonarcloud.io/dashboard?id=io.grpc%3Agrpc-swagger)
+
+# FAQ
 
 # License
 [MIT License.](/LICENSE)
