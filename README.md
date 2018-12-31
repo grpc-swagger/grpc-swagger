@@ -3,7 +3,7 @@
 # What is grpc-swagger
 Just as its name implies, grpc-swagger is the [swagger](https://swagger.io/) for [grpc](http://grpc.io/)
 
-<img src="./doc/screenshots/screenshot1.png" height="300px" width="300px"/><img src="./doc/screenshots/screenshot2.png" height="300px" width="200px"/><img src="./doc/screenshots/screenshot3.png" height="300px" width="200px"/>
+<img src="./doc/screenshots/screenshot1.png" height="300px" width="300px"/><img src="./doc/screenshots/screenshot2.png" height="300px" width="300px"/><img src="./doc/screenshots/screenshot3.png" height="300px" width="300px"/>
 
 # Live Demo
 
