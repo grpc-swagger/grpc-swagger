@@ -16,8 +16,8 @@ public class DocumentService {
     @Value("${docHost}")
     private String docHost;
 
-    public SwaggerV2Documentation getDocumentation(String group) {
-        SwaggerV2Documentation swaggerV2Documentation = DocumentRegistry.getInstance().get(group);
+    public SwaggerV2Documentation getDocumentation(String service) {
+        SwaggerV2Documentation swaggerV2Documentation = DocumentRegistry.getInstance().get(service);
         if (swaggerV2Documentation != null) {
             swaggerV2Documentation.setHost(docHost);
         }

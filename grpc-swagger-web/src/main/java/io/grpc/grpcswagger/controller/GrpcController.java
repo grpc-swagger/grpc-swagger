@@ -67,8 +67,8 @@ public class GrpcController {
     }
 
     @RequestMapping("/v2/api-docs")
-    public Object groupResponse(@RequestParam("group") String group) {
-        return documentService.getDocumentation(group);
+    public Object groupResponse(@RequestParam("service") String service) {
+        return documentService.getDocumentation(service);
     }
 
     @RequestMapping("/{rawFullMethodName}")
