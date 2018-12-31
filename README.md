@@ -5,9 +5,13 @@ Just as its name implies, grpc-swagger is the [swagger](https://swagger.io/) for
 
 <img src="./doc/screenshots/screenshot1.png" height="280px" width="280px"/><img src="./doc/screenshots/screenshot2.png" height="280px" width="280px"/><img src="./doc/screenshots/screenshot3.png" height="280px" width="280px"/>
 
+# Feature List
+
 # Live Demo
 
 [demo](http://52.231.167.148/index.html)
+
+# How to use it
 
 # Run with Docker
 ```
