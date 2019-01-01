@@ -12,7 +12,7 @@ import lombok.Data;
 @Data
 public class SwaggerV2Documentation {
     private String swagger = "2.0"; // MAGIC
-    private InfoObject infoObject;
+    private InfoObject info;
     private List<String> produces = Collections.singletonList("application/json");
     private List<String> consumes = Collections.singletonList("application/json");
     private String basePath = "/";

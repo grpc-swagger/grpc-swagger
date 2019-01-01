@@ -36,7 +36,7 @@ public class OpenApiParser {
 
         Map<String, PathItem> pathItemMap = parsePaths(serviceResolver);
         SwaggerV2Documentation swaggerV2Documentation = new SwaggerV2Documentation();
-        swaggerV2Documentation.setInfoObject(new InfoObject.InfoObjectBuilder()
+        swaggerV2Documentation.setInfo(new InfoObject.InfoObjectBuilder()
                 .title("grpc-swagger").build());
         swaggerV2Documentation.setDefinitions(typeLookupTable);
         swaggerV2Documentation.setPaths(pathItemMap);
