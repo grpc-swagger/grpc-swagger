@@ -46,22 +46,22 @@ docker run -p 8080:8080 grpc-swagger
 ## 使用流程
 1. 运行 gRPC-swagger，具体参考[上面的流程](#运行)
 2. 启动服务时开启反射。下面是 java 示例  
-  pom.xml 中添加依赖
-  ```xml
-  <dependency>
-      <groupId>io.grpc</groupId>
-      <artifactId>grpc-services</artifactId>
-      <version>${grpc.version}</version>
-  </dependency>
-  ```
-  启动服务时允许反射：
-  ```java
-  Server server = ServerBuilder.forPort(SERVER_PORT)
-      .addService(new HelloServiceImpl())
-      .addService(ProtoReflectionService.newInstance())
-      .build()
-      .start();
-  ```
+   pom.xml 中添加依赖
+   ```xml
+   <dependency>
+       <groupId>io.grpc</groupId>
+       <artifactId>grpc-services</artifactId>
+       <version>${grpc.version}</version>
+   </dependency>
+   ```
+   启动服务时允许反射：
+   ```java
+   Server server = ServerBuilder.forPort(SERVER_PORT)
+       .addService(new HelloServiceImpl())
+       .addService(ProtoReflectionService.newInstance())
+       .build()
+       .start();
+   ```
 3. 注册实例，通过 [register](#注册实例) 将提供服务的实例注册到 gRPC-swagger 上，gRPC-swagger 会自动扫描服务，注册完成之后会返回注册成功的服务。后面可以通过 [listServices](#列出服务) 接口查看注册成功的服务。为了方便使用，[这里](http://ui.grpcs.top/service.html) 提供了一个简单的 html 页面。
 4. 使用 swagger-ui 查看 gRPC 服务，在输入框中输入 `<host:port>/v2/api?service=<fullServiceName>`，其中`fullServiceName` 就是上面返回注册成功的服务。
 5. 点击 `Try it out` 进行服务测试
