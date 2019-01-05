@@ -16,6 +16,7 @@ import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -67,8 +68,9 @@ public class GrpcController {
     }
 
     @RequestMapping("/v2/api-docs")
-    public Object groupResponse(@RequestParam("service") String service) {
-        return documentService.getDocumentation(service);
+    public Object groupResponse(@RequestParam("service") String service, HttpServletRequest httpServletRequest) {
+        String apiHost = httpServletRequest.getHeader("Host");
+        return documentService.getDocumentation(service, apiHost);
     }
 
     @RequestMapping("/{rawFullMethodName}")
