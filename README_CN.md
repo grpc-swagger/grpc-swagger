@@ -46,7 +46,7 @@ gRPC-swagger 是基于 [gRPC 反射](https://github.com/grpc/grpc/blob/master/do
 ### 使用打包好的jar包
 ```base
 wget https://github.com/grpc-swagger/grpc-swagger/releases/download/0.1.1/grpc-swagger-web-0.0.1-SNAPSHOT.jar
-java -jar grpc-swagger-web/target/grpc-swagger-web-0.0.1-SNAPSHOT.jar
+java -jar grpc-swagger-web-0.0.1-SNAPSHOT.jar
 ```
 ### 编译构建
 ```bash
