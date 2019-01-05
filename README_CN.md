@@ -46,7 +46,7 @@ gRPC-swagger 是基于 [gRPC 反射](https://github.com/grpc/grpc/blob/master/do
 
 ## 部署运行
 ```bash
-mvn clean pacakge
+mvn clean package
 java -jar grpc-swagger-web/target/grpc-swagger-web-0.0.1-SNAPSHOT.jar
 ```
 默认使用8080端口，如果使用其他端口可以通过如下方式设置

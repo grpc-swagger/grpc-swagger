@@ -50,7 +50,7 @@ gRPC-swagger is a [gRPC](https://github.com/grpc/) debuggling tool developed bas
 
 ## Build and Run
 ```bash
-mvn clean pacakge
+mvn clean package
 java -jar grpc-swagger-web/target/grpc-swagger-web-0.0.1-SNAPSHOT.jar
 ```
 
