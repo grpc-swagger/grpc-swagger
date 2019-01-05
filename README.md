@@ -5,6 +5,7 @@
 [![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/Naereen/StrapDown.js/blob/master/LICENSE)
 
 # What is grpc-swagger
+
 Just as its name implies, grpc-swagger is the [swagger](https://swagger.io/) for [grpc](http://grpc.io/)
 
 <img src="./doc/screenshots/screenshot1.png" height="280px" width="280px"/><img src="./doc/screenshots/screenshot2.png" height="280px" width="280px"/><img src="./doc/screenshots/screenshot3.png" height="280px" width="280px"/>
