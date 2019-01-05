@@ -47,8 +47,13 @@ gRPC-swagger is a [gRPC](https://github.com/grpc/) debuggling tool developed bas
 
 [demo](http://ui.grpcs.top)
 
-
 ## Build and Run
+### Use released jar
+```base
+wget https://github.com/grpc-swagger/grpc-swagger/releases/download/0.1.1/grpc-swagger-web-0.0.1-SNAPSHOT.jar
+java -jar grpc-swagger-web-0.0.1-SNAPSHOT.jar
+```
+### Build from source
 ```bash
 mvn clean package
 java -jar grpc-swagger-web/target/grpc-swagger-web-0.0.1-SNAPSHOT.jar
