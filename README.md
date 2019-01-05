@@ -4,7 +4,7 @@
 [![Coverage Status](https://codecov.io/gh/grpc-swagger/grpc-swagger/branch/master/graph/badge.svg)](https://codecov.io/gh/grpc-swagger/grpc-swagger)
 [![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/Naereen/StrapDown.js/blob/master/LICENSE)
 
-[中文文档](README.md)
+[中文文档](README_CN.md)
 
 <!-- toc -->
 
@@ -49,10 +49,15 @@ gRPC-swagger is a [gRPC](https://github.com/grpc/) debuggling tool developed bas
 
 
 ## Build and Run
+```bash
+mvn clean pacakge
+java -jar grpc-swagger-web/target/grpc-swagger-web-0.0.1-SNAPSHOT.jar
 ```
-mvn clean package
-docker build -t grpc-swagger .
-docker run -p 8080:8080 grpc-swagger
+
+By default it will start at port 8080, use the following command if
+you want to use another port.
+```bash
+java -jar grpc-swagger-web/target/grpc-swagger-web-0.0.1-SNAPSHOT.jar --server.port=888
 ```
 
 ## How to use it
@@ -147,7 +152,6 @@ Thanks to the [polyglot](https://github.com/grpc-ecosystem/polyglot) project，T
 
 ## Contribute
 Feel free to open an issue or pull request. We will appreciate it!
-[sonar](https://sonarcloud.io/dashboard?id=io.grpc%3Agrpc-swagger)
 
 ## FAQ
 

@@ -45,11 +45,13 @@ gRPC-swagger 是基于 [gRPC 反射](https://github.com/grpc/grpc/blob/master/do
 [demo](http://ui.grpcs.top)
 
 ## 部署运行
-### 使用 docker 运行
-```bash 
-mvn clean package
-docker build -t grpc-swagger .
-docker run -p 8080:8080 grpc-swagger
+```bash
+mvn clean pacakge
+java -jar grpc-swagger-web/target/grpc-swagger-web-0.0.1-SNAPSHOT.jar
+```
+默认使用8080端口，如果使用其他端口可以通过如下方式设置
+```bash
+java -jar grpc-swagger-web/target/grpc-swagger-web-0.0.1-SNAPSHOT.jar --server.port=888
 ```
 
 ## 使用流程
@@ -148,7 +150,6 @@ url： `/v2/api-docs`
 
 ## Contribute
 Feel free to open an issue or pull request. We will appreciate it!
-[sonar](https://sonarcloud.io/dashboard?id=io.grpc%3Agrpc-swagger)
 
 ## FAQ
 
