@@ -45,7 +45,7 @@ gRPC-swagger is a [gRPC](https://github.com/grpc/) debuggling tool developed bas
 
 ## Live Demo
 
-[demo](http://ui.gprcs.top)
+[demo](http://ui.grpcs.top)
 
 
 ## Build and Run
@@ -74,7 +74,7 @@ docker run -p 8080:8080 grpc-swagger
        .build()
        .start();
    	```
-3. Register endpoint. You can register the endpoint that running gRPC services to gRPC-swagger through the [`register`](#register-endpoint)) interface, gRPC-swagger will automatically scan available services and return successful registered services when finished. The registered services can be listed through the [`listServices`](#services-list) interface. For easily using, we have provied a simple html page [here](http://ui.grpcs.top/service.html).
+3. Register endpoint. You can register the endpoint that running gRPC services to gRPC-swagger through the [`register`](#register-endpoint) interface, gRPC-swagger will automatically scan available services and return successful registered services when finished. The registered services can be listed through the [`listServices`](#services-list) interface. For easily using, we have provied a simple html page [here](http://ui.grpcs.top/service.html).
 4. Use swagger-ui to see gRPC services. Input `<host:port>/v2/api?service=<fullServiceName>` at the top input box, and the `fullServiceName` is the successful registed service name above.
 5. Click `Try it out` button to have a test on the gRPC method.
 
