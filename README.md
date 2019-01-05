@@ -54,10 +54,10 @@ mvn clean package
 java -jar grpc-swagger-web/target/grpc-swagger-web-0.0.1-SNAPSHOT.jar
 ```
 
-By default it will start at port 8080, use the following command if
+By default it will start at port 8080, use `--server.port=yourport` if
 you want to use another port.
 ```bash
-java -jar grpc-swagger-web/target/grpc-swagger-web-0.0.1-SNAPSHOT.jar --server.port=888
+java -jar grpc-swagger-web/target/grpc-swagger-web-0.0.1-SNAPSHOT.jar --server.port=8888
 ```
 
 ## How to use it
