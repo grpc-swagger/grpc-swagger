@@ -18,7 +18,7 @@
   * [Register Endpoint](#register-endpoint)
   * [Services List](#services-list)
   * [Call gRPC Method](#call-grpc-method)
-  * [Swagger Interface](#swagger-interface)
+  * [Swagger API](#swagger-api)
 - [Acknowledgment](#acknowledgment)
 - [Contribute](#contribute)
 - [FAQ](#faq)
@@ -71,7 +71,7 @@ java -jar grpc-swagger-web/target/grpc-swagger-web-0.0.1-SNAPSHOT.jar --server.p
        <version>${grpc.version}</version>
    </dependency>
    ```
-   enable reflection：
+   enable reflection:
    ```java
    Server server = ServerBuilder.forPort(SERVER_PORT)
        .addService(new HelloServiceImpl())
@@ -139,7 +139,7 @@ parameters：
 * `rawFullMethodName` - the full gRPC method name，e.g. `io.grpc.grpcswagger.showcase.HelloService.GetUser`
 * `payload` - gRPC method parameters，JSON format。 You can use `endpoint` parameter to specify the calling endpoint.
 
-### Swagger Interface
+### Swagger API
 url： `/v2/api-docs`
 
 return data used by swagger-ui

@@ -12,7 +12,6 @@
 - [运行截图](#%E8%BF%90%E8%A1%8C%E6%88%AA%E5%9B%BE)
 - [在线实例](#%E5%9C%A8%E7%BA%BF%E5%AE%9E%E4%BE%8B)
 - [部署运行](#%E9%83%A8%E7%BD%B2%E8%BF%90%E8%A1%8C)
-  * [使用 docker 运行](#%E4%BD%BF%E7%94%A8-docker-%E8%BF%90%E8%A1%8C)
 - [使用流程](#%E4%BD%BF%E7%94%A8%E6%B5%81%E7%A8%8B)
 - [接口](#%E6%8E%A5%E5%8F%A3)
   * [注册实例](#%E6%B3%A8%E5%86%8C%E5%AE%9E%E4%BE%8B)
@@ -54,7 +53,7 @@ java -jar grpc-swagger-web/target/grpc-swagger-web-0.0.1-SNAPSHOT.jar --server.p
 ```
 
 ## 使用流程
-1. 运行 gRPC-swagger，具体参考[上面的流程](#运行)
+1. 运行 gRPC-swagger，具体参考[部署运行](#部署运行)
 2. 启动服务时开启反射。下面是 java 示例  
    pom.xml 中添加依赖
    ```xml
