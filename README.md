@@ -57,7 +57,7 @@ docker run -p 8080:8080 grpc-swagger
 
 ## How to use it
 1. Run gRPC-swagger, referring to [Build and Run](#build-and-run) 
-2. Enable reflection when staring service. Below is a java example:
+2. Enable reflection when staring service. Below is a java example:  
 	add dependency to `pom.xml`:
    	```xml
    	<dependency>
