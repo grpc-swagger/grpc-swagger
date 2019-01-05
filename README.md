@@ -13,6 +13,8 @@
 - [Screenshots](#screenshots)
 - [Live Demo](#live-demo)
 - [Build and Run](#build-and-run)
+  * [Use released jar](#use-released-jar)
+  * [Build from source](#build-from-source)
 - [How to use it](#how-to-use-it)
 - [API](#api)
   * [Register Endpoint](#register-endpoint)
