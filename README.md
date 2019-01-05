@@ -63,7 +63,7 @@ java -jar grpc-swagger-web/target/grpc-swagger-web-0.0.1-SNAPSHOT.jar --server.p
 ## How to use it
 1. Run gRPC-swagger, referring to [Build and Run](#build-and-run) 
 2. Enable reflection when staring service. Below is a java example:  
-	add dependency to `pom.xml`:
+	add dependency to `pom.xml`:  
    	```xml
    	<dependency>
        <groupId>io.grpc</groupId>
@@ -71,7 +71,7 @@ java -jar grpc-swagger-web/target/grpc-swagger-web-0.0.1-SNAPSHOT.jar --server.p
        <version>${grpc.version}</version>
    	</dependency>
    	```
-   	enable reflection:
+   	enable reflection:  
    	```java
    	Server server = ServerBuilder.forPort(SERVER_PORT)
        .addService(new HelloServiceImpl())
