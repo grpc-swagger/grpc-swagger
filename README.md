@@ -78,23 +78,7 @@ java -jar grpc-swagger-web/target/grpc-swagger-web-0.0.1-SNAPSHOT.jar --server.p
        .addService(ProtoReflectionService.newInstance())
        .build()
        .start();
-   ```
-     
-   	```xml
-   	<dependency>
-       <groupId>io.grpc</groupId>
-       <artifactId>grpc-services</artifactId>
-       <version>${grpc.version}</version>
-   	</dependency>
-   	```
-   	 
-   	```java
-   	Server server = ServerBuilder.forPort(SERVER_PORT)
-       .addService(new HelloServiceImpl())
-       .addService(ProtoReflectionService.newInstance())
-       .build()
-       .start();
-   	```
+   ``` 
 3. Register endpoint. You can register the endpoint that running gRPC services to gRPC-swagger through the [`register`](#register-endpoint) interface, gRPC-swagger will automatically scan available services and return successful registered services when finished. The registered services can be listed through the [`listServices`](#services-list) interface. For easily using, we have provied a simple html page [here](http://ui.grpcs.top/service.html).
 4. Use swagger-ui to see gRPC services. Input `<host:port>/v2/api?service=<fullServiceName>` at the top input box, and the `fullServiceName` is the successful registed service name above.
 5. Click `Try it out` button to have a test on the gRPC method.
