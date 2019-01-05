@@ -3,12 +3,15 @@
 [![Coverage Status](https://codecov.io/gh/grpc-swagger/grpc-swagger/branch/master/graph/badge.svg)](https://codecov.io/gh/grpc-swagger/grpc-swagger)
 [![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/Naereen/StrapDown.js/blob/master/LICENSE)
 
+[英文文档](README.md)
+
 <!-- toc -->
 
 - [简介](#%E7%AE%80%E4%BB%8B)
 - [特点](#%E7%89%B9%E7%82%B9)
+- [运行截图](#%E8%BF%90%E8%A1%8C%E6%88%AA%E5%9B%BE)
 - [在线实例](#%E5%9C%A8%E7%BA%BF%E5%AE%9E%E4%BE%8B)
-- [运行](#%E8%BF%90%E8%A1%8C)
+- [部署运行](#%E9%83%A8%E7%BD%B2%E8%BF%90%E8%A1%8C)
   * [使用 docker 运行](#%E4%BD%BF%E7%94%A8-docker-%E8%BF%90%E8%A1%8C)
 - [使用流程](#%E4%BD%BF%E7%94%A8%E6%B5%81%E7%A8%8B)
 - [接口](#%E6%8E%A5%E5%8F%A3)
@@ -24,18 +27,23 @@
 <!-- tocstop -->
 
 ## 简介 
-gRPC-swagger 是基于 gRPC 反射开发的一款 gRPC 调试工具，可以使用 swagger-ui 方便地展示和调用 gRPC 方法。因为 gRPC-swagger 是基于反射开发，所以使用时无需修改 proto 
-及相关的代码实现，只需在启动服务时开启反射功能。关于 gRPC 反射的相关内容可以参考[这里](https://github.com/grpc/grpc/blob/master/doc/server-reflection.md)。
- 
+gRPC-swagger 是基于 [gRPC 反射](https://github.com/grpc/grpc/blob/master/doc/server-reflection.md))开发的一款 [gRPC]
+(https://github.com/grpc/) 调试工具，可以使用 swagger-ui 方便地展示和调用 gRPC 方法。因为 gRPC-swagger 是基于反射开发，所以使用时无需修改 proto 及相关的代码实现，只需在启动服务时开启反射功能。
+
 ## 特点
 * 简单易用，只需启动服务时允许反射，无需修改 proto 及相关的实现。
 * 集成 swagger-ui，可以方便的查看 gRPC 方法和参数定义。
 * 通过 http 方式调用 gRPC 服务，极大的提高了测试效率。
 
+## 运行截图
+![](doc/screenshots/01.png)
+
+![](doc/screenshots/02.png)
+
 ## 在线实例
 [demo](http://ui.grpcs.top)
 
-## 运行
+## 部署运行
 ### 使用 docker 运行
 ```bash 
 mvn clean package
@@ -73,8 +81,8 @@ url：`/register`
 
 参数：
 * `host` - 地址（必填）
-* `ip` - 端口（必填）
-* `groupName` - 分组名（选填），默认是 `host:ip`，通过指定分组名可以将部署相同服务的实例归为一组
+* `port` - 端口（必填）
+* `groupName` - 分组名（选填），默认是 `host:port`，通过指定分组名可以将部署相同服务的实例归为一组
 
 返回示例
 
