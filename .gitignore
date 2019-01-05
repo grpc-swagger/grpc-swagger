@@ -25,3 +25,4 @@
 /.nb-gradle/
 */target/
 */node_modules/
+.DS_Store

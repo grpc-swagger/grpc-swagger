@@ -13,13 +13,10 @@ import io.grpc.grpcswagger.openapi.v2.SwaggerV2Documentation;
 @Service
 public class DocumentService {
 
-    @Value("${docHost}")
-    private String docHost;
-
-    public SwaggerV2Documentation getDocumentation(String service) {
+    public SwaggerV2Documentation getDocumentation(String service, String apiHost) {
         SwaggerV2Documentation swaggerV2Documentation = DocumentRegistry.getInstance().get(service);
         if (swaggerV2Documentation != null) {
-            swaggerV2Documentation.setHost(docHost);
+            swaggerV2Documentation.setHost(apiHost);
         }
         return swaggerV2Documentation;
     }
