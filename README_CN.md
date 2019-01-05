@@ -27,8 +27,7 @@
 <!-- tocstop -->
 
 ## 简介 
-gRPC-swagger 是基于 [gRPC 反射](https://github.com/grpc/grpc/blob/master/doc/server-reflection.md))开发的一款 [gRPC]
-(https://github.com/grpc/) 调试工具，可以使用 swagger-ui 方便地展示和调用 gRPC 方法。因为 gRPC-swagger 是基于反射开发，所以使用时无需修改 proto 及相关的代码实现，只需在启动服务时开启反射功能。
+gRPC-swagger 是基于 [gRPC 反射](https://github.com/grpc/grpc/blob/master/doc/server-reflection.md)开发的一款 [gRPC](https://github.com/grpc/) 调试工具，可以使用 swagger-ui 方便地展示和调用 gRPC 方法。因为 gRPC-swagger 是基于反射开发，所以使用时无需修改 proto 及相关的代码实现，只需在启动服务时开启反射功能。
 
 ## 特点
 * 简单易用，只需启动服务时允许反射，无需修改 proto 及相关的实现。
@@ -45,11 +44,13 @@ gRPC-swagger 是基于 [gRPC 反射](https://github.com/grpc/grpc/blob/master/do
 [demo](http://ui.grpcs.top)
 
 ## 部署运行
-### 使用 docker 运行
-```bash 
+```bash
 mvn clean package
-docker build -t grpc-swagger .
-docker run -p 8080:8080 grpc-swagger
+java -jar grpc-swagger-web/target/grpc-swagger-web-0.0.1-SNAPSHOT.jar
+```
+默认使用8080端口，如果使用其他端口可以通过`--server.port=端口号`的方式设置
+```bash
+java -jar grpc-swagger-web/target/grpc-swagger-web-0.0.1-SNAPSHOT.jar --server.port=8888
 ```
 
 ## 使用流程
@@ -148,7 +149,6 @@ url： `/v2/api-docs`
 
 ## Contribute
 Feel free to open an issue or pull request. We will appreciate it!
-[sonar](https://sonarcloud.io/dashboard?id=io.grpc%3Agrpc-swagger)
 
 ## FAQ
 
