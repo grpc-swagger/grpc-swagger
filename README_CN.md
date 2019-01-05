@@ -27,8 +27,7 @@
 <!-- tocstop -->
 
 ## 简介 
-gRPC-swagger 是基于 [gRPC 反射](https://github.com/grpc/grpc/blob/master/doc/server-reflection.md))开发的一款 [gRPC]
-(https://github.com/grpc/) 调试工具，可以使用 swagger-ui 方便地展示和调用 gRPC 方法。因为 gRPC-swagger 是基于反射开发，所以使用时无需修改 proto 及相关的代码实现，只需在启动服务时开启反射功能。
+gRPC-swagger 是基于 [gRPC 反射](https://github.com/grpc/grpc/blob/master/doc/server-reflection.md)开发的一款 [gRPC](https://github.com/grpc/) 调试工具，可以使用 swagger-ui 方便地展示和调用 gRPC 方法。因为 gRPC-swagger 是基于反射开发，所以使用时无需修改 proto 及相关的代码实现，只需在启动服务时开启反射功能。
 
 ## 特点
 * 简单易用，只需启动服务时允许反射，无需修改 proto 及相关的实现。
