@@ -23,6 +23,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -56,6 +57,9 @@ public class GrpcController {
 
     private static final String ENDPOINT_PARAM = "endpoint";
 
+    @Value("${server.baseUrl:}")
+    private String baseUrl;
+
     @Autowired
     private GrpcProxyService grpcProxyService;
 
@@ -69,7 +73,10 @@ public class GrpcController {
 
     @RequestMapping("/v2/api-docs")
     public Object groupResponse(@RequestParam("service") String service, HttpServletRequest httpServletRequest) {
-        String apiHost = httpServletRequest.getHeader("Host");
+        String apiHost = baseUrl;
+        if (StringUtils.isBlank(apiHost)) {
+            apiHost = httpServletRequest.getHeader("Host");
+        }
         return documentService.getDocumentation(service, apiHost);
     }
 
