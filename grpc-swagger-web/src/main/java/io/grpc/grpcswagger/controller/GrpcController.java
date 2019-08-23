@@ -1,50 +1,40 @@
 package io.grpc.grpcswagger.controller;
 
-import static com.google.common.collect.Sets.newConcurrentHashSet;
-import static io.grpc.CallOptions.DEFAULT;
-import static io.grpc.grpcswagger.discovery.ServiceDiscoveryCenter.addServiceConfig;
-import static io.grpc.grpcswagger.model.Result.error;
-import static io.grpc.grpcswagger.utils.ServiceRegisterUtils.getServiceNames;
-import static io.grpc.grpcswagger.utils.ServiceRegisterUtils.registerByIpAndPort;
-import static io.grpc.grpcswagger.utils.GrpcReflectionUtils.parseToMethodDefinition;
-import static java.util.Collections.singleton;
-import static java.util.Collections.singletonList;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.stream.Collectors;
-
-import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.parser.ParserConfig;
 import com.google.common.net.HostAndPort;
 import com.google.protobuf.DescriptorProtos.FileDescriptorSet;
-
 import io.grpc.Channel;
+import io.grpc.grpcswagger.config.AppConfig;
 import io.grpc.grpcswagger.discovery.ServiceDiscoveryCenter;
-import io.grpc.grpcswagger.model.RegisterParam;
-import io.grpc.grpcswagger.model.Result;
-import io.grpc.grpcswagger.model.ServiceConfig;
+import io.grpc.grpcswagger.model.*;
 import io.grpc.grpcswagger.service.DocumentService;
-import io.grpc.grpcswagger.utils.ChannelFactory;
-import io.grpc.grpcswagger.model.CallResults;
-import io.grpc.grpcswagger.model.GrpcMethodDefinition;
 import io.grpc.grpcswagger.service.GrpcProxyService;
+import io.grpc.grpcswagger.utils.ChannelFactory;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
+
+import static com.google.common.collect.Sets.newConcurrentHashSet;
+import static io.grpc.CallOptions.DEFAULT;
+import static io.grpc.grpcswagger.discovery.ServiceDiscoveryCenter.addServiceConfig;
+import static io.grpc.grpcswagger.model.Result.error;
+import static io.grpc.grpcswagger.utils.GrpcReflectionUtils.parseToMethodDefinition;
+import static io.grpc.grpcswagger.utils.ServiceRegisterUtils.getServiceNames;
+import static io.grpc.grpcswagger.utils.ServiceRegisterUtils.registerByIpAndPort;
+import static java.util.Collections.singleton;
+import static java.util.Collections.singletonList;
 
 /**
  * @author liuzhengyang
@@ -97,6 +87,9 @@ public class GrpcController {
 
     @RequestMapping("/listServices")
     public Result<Object> listServices() {
+        if (!AppConfig.enableListService()) {
+            return Result.error("Not support this action.");
+        }
         Map<String, ServiceConfig> successServicesMap = ServiceDiscoveryCenter.getServicesConfigMap().entrySet().stream()
                 .filter(entry -> entry.getValue().isSuccess())
                 .collect(Collectors.toMap(Entry::getKey, Entry::getValue));
