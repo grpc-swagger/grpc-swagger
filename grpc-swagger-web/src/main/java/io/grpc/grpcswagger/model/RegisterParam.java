@@ -9,7 +9,6 @@ import lombok.Data;
 public class RegisterParam {
     private String host;
     private int port;
-    private String groupName;
 
     public String getHostAndPortText() {
         return host + ":" + port;
