@@ -1,14 +1,16 @@
 package io.grpc.grpcswagger.config;
 
-import io.grpc.grpcswagger.GrpcSwaggerApplication;
+import static io.grpc.grpcswagger.config.AppConfig.enableListService;
+import static io.grpc.grpcswagger.config.AppConfig.serviceExpiredSeconds;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static io.grpc.grpcswagger.config.AppConfig.enableListService;
-import static io.grpc.grpcswagger.config.AppConfig.serviceExpiredSeconds;
+import io.grpc.grpcswagger.GrpcSwaggerApplication;
 
 /**
  * @author Jikai Zhang
@@ -16,6 +18,10 @@ import static io.grpc.grpcswagger.config.AppConfig.serviceExpiredSeconds;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = GrpcSwaggerApplication.class)
+@TestPropertySource(properties = {
+        "enable.list.service=false",
+        "service.expired.seconds=60*60*3"
+})
 public class AppConfigTest {
     
     @Test
