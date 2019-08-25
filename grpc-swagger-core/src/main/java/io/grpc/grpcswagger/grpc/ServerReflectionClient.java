@@ -27,7 +27,7 @@ import io.grpc.stub.StreamObserver;
 
 public class ServerReflectionClient {
     private static final Logger logger = LoggerFactory.getLogger(ServerReflectionClient.class);
-    private static final long LIST_RPC_DEADLINE_MS = 1_000;
+    private static final long LIST_RPC_DEADLINE_MS = 10_000;
     private static final long LOOKUP_RPC_DEADLINE_MS = 10_000;
     private static final ServerReflectionRequest LIST_SERVICES_REQUEST =
             ServerReflectionRequest.newBuilder()

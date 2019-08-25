@@ -38,6 +38,8 @@ import io.grpc.grpcswagger.model.GrpcMethodDefinition;
 import io.grpc.grpcswagger.model.RegisterParam;
 import io.grpc.grpcswagger.model.Result;
 import io.grpc.grpcswagger.model.ServiceConfig;
+import io.grpc.grpcswagger.openapi.v2.SwaggerV2DocumentView;
+import io.grpc.grpcswagger.openapi.v2.SwaggerV2Documentation;
 import io.grpc.grpcswagger.service.DocumentService;
 import io.grpc.grpcswagger.service.GrpcProxyService;
 import io.grpc.grpcswagger.utils.ChannelFactory;
@@ -66,7 +68,8 @@ public class GrpcController {
     @RequestMapping("/v2/api-docs")
     public Object groupResponse(@RequestParam("service") String service, HttpServletRequest httpServletRequest) {
         String apiHost = httpServletRequest.getHeader("Host");
-        return documentService.getDocumentation(service, apiHost);
+        SwaggerV2Documentation documentation = documentService.getDocumentation(service, apiHost);
+        return new SwaggerV2DocumentView(service, documentation);
     }
 
     @RequestMapping("/{rawFullMethodName}")
