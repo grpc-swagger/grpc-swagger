@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class AppConfig {
     
-    private static AppConfigValues appConfigValues;
+    private static AppConfigValues appConfigValues = new AppConfigValues();
    
     @Autowired
     public void setAppConfigValues(AppConfigValues values) {
@@ -18,6 +18,7 @@ public class AppConfig {
     }
     
     public static boolean enableListService() {
+        
         return appConfigValues.isEnableListService();
     }
     
