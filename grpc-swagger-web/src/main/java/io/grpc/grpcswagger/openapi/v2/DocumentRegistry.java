@@ -1,9 +1,9 @@
 package io.grpc.grpcswagger.openapi.v2;
 
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-
 import javax.annotation.Nullable;
+
+import io.grpc.grpcswagger.store.BaseStorage;
+import io.grpc.grpcswagger.store.StorageUtils;
 
 /**
  * @author liuzhengyang
@@ -15,15 +15,14 @@ public class DocumentRegistry {
         return INSTANCE;
     }
 
-    private final ConcurrentMap<String, SwaggerV2Documentation> registryMap =
-            new ConcurrentHashMap<>();
+    private final BaseStorage<String, SwaggerV2Documentation> storage = StorageUtils.newStorage();
 
     public void put(String serviceName, SwaggerV2Documentation swaggerV2Documentation) {
-        registryMap.put(serviceName, swaggerV2Documentation);
+        storage.put(serviceName, swaggerV2Documentation);
     }
 
     @Nullable
     public SwaggerV2Documentation get(String serviceName) {
-        return registryMap.get(serviceName);
+        return storage.get(serviceName);
     }
 }

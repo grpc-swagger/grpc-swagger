@@ -1,6 +1,6 @@
 package io.grpc.grpcswagger.utils;
 
-import static com.google.protobuf.util.JsonFormat.*;
+import static com.google.protobuf.util.JsonFormat.TypeRegistry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +28,9 @@ public class MessageWriter<T extends Message> implements StreamObserver<T> {
     }
 
     public static <T extends Message> MessageWriter<T> newInstance(TypeRegistry registry, CallResults results){
-        return new MessageWriter<>(JsonFormat.printer().usingTypeRegistry(registry), results);
+        return new MessageWriter<>(
+                JsonFormat.printer().usingTypeRegistry(registry).includingDefaultValueFields(),
+                results);
     }
 
     @Override

@@ -1,25 +1,20 @@
 package io.grpc.grpcswagger.controller;
 
-import static com.google.common.collect.Sets.newConcurrentHashSet;
 import static io.grpc.CallOptions.DEFAULT;
-import static io.grpc.grpcswagger.discovery.ServiceDiscoveryCenter.addServiceConfig;
+import static io.grpc.grpcswagger.manager.ServiceConfigManager.getServiceConfigs;
 import static io.grpc.grpcswagger.model.Result.error;
+import static io.grpc.grpcswagger.utils.GrpcReflectionUtils.parseToMethodDefinition;
 import static io.grpc.grpcswagger.utils.ServiceRegisterUtils.getServiceNames;
 import static io.grpc.grpcswagger.utils.ServiceRegisterUtils.registerByIpAndPort;
-import static io.grpc.grpcswagger.utils.GrpcReflectionUtils.parseToMethodDefinition;
-import static java.util.Collections.singleton;
 import static java.util.Collections.singletonList;
+import static java.util.stream.Collectors.toList;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,15 +31,18 @@ import com.google.common.net.HostAndPort;
 import com.google.protobuf.DescriptorProtos.FileDescriptorSet;
 
 import io.grpc.Channel;
-import io.grpc.grpcswagger.discovery.ServiceDiscoveryCenter;
+import io.grpc.grpcswagger.config.AppConfig;
+import io.grpc.grpcswagger.manager.ServiceConfigManager;
+import io.grpc.grpcswagger.model.CallResults;
+import io.grpc.grpcswagger.model.GrpcMethodDefinition;
 import io.grpc.grpcswagger.model.RegisterParam;
 import io.grpc.grpcswagger.model.Result;
 import io.grpc.grpcswagger.model.ServiceConfig;
+import io.grpc.grpcswagger.openapi.v2.SwaggerV2DocumentView;
+import io.grpc.grpcswagger.openapi.v2.SwaggerV2Documentation;
 import io.grpc.grpcswagger.service.DocumentService;
-import io.grpc.grpcswagger.utils.ChannelFactory;
-import io.grpc.grpcswagger.model.CallResults;
-import io.grpc.grpcswagger.model.GrpcMethodDefinition;
 import io.grpc.grpcswagger.service.GrpcProxyService;
+import io.grpc.grpcswagger.utils.ChannelFactory;
 
 /**
  * @author liuzhengyang
@@ -70,37 +68,39 @@ public class GrpcController {
     @RequestMapping("/v2/api-docs")
     public Object groupResponse(@RequestParam("service") String service, HttpServletRequest httpServletRequest) {
         String apiHost = httpServletRequest.getHeader("Host");
-        return documentService.getDocumentation(service, apiHost);
+        SwaggerV2Documentation documentation = documentService.getDocumentation(service, apiHost);
+        return new SwaggerV2DocumentView(service, documentation);
     }
 
     @RequestMapping("/{rawFullMethodName}")
     public Result<Object> invokeMethod(@PathVariable String rawFullMethodName, @RequestBody String payload) {
         GrpcMethodDefinition methodDefinition = parseToMethodDefinition(rawFullMethodName);
         JSONObject jsonObject = JSON.parseObject(payload);
-        HostAndPort hostAndPort;
+        HostAndPort endPoint;
         if (jsonObject.containsKey(ENDPOINT_PARAM)) {
-            hostAndPort = HostAndPort.fromString(jsonObject.getString(ENDPOINT_PARAM));
+            endPoint = HostAndPort.fromString(jsonObject.getString(ENDPOINT_PARAM));
             jsonObject.remove(ENDPOINT_PARAM);
             payload = JSON.toJSONString(jsonObject);
         } else {
             String fullServiceName = methodDefinition.getFullServiceName();
-            hostAndPort = ServiceDiscoveryCenter.getTargetHostAdnPost(fullServiceName);
+            endPoint = ServiceConfigManager.getEndPoint(fullServiceName);
         }
-        if (hostAndPort == null) {
+        if (endPoint == null) {
             return Result.success("can't find target endpoint");
         }
 
-        Channel channel = ChannelFactory.create(hostAndPort);
+        Channel channel = ChannelFactory.create(endPoint);
         CallResults results = grpcProxyService.invokeMethod(methodDefinition, channel, DEFAULT, singletonList(payload));
-        return Result.success(results.asJSON());
+        return Result.success(results.asJSON())
+                .setEndpoint(endPoint.toString());
     }
 
     @RequestMapping("/listServices")
     public Result<Object> listServices() {
-        Map<String, ServiceConfig> successServicesMap = ServiceDiscoveryCenter.getServicesConfigMap().entrySet().stream()
-                .filter(entry -> entry.getValue().isSuccess())
-                .collect(Collectors.toMap(Entry::getKey, Entry::getValue));
-        return Result.success(successServicesMap);
+        if (!AppConfig.enableListService()) {
+            return Result.error("Not support this action.");
+        }
+       return Result.success(getServiceConfigs());
     }
 
     @RequestMapping("/register")
@@ -110,14 +110,11 @@ public class GrpcController {
         if (CollectionUtils.isEmpty(fileDescriptorSets)) {
             return error("no services find");
         }
-        if (StringUtils.isBlank(registerParam.getGroupName())) {
-            registerParam.setGroupName(registerParam.getHostAndPortText());
-        }
-        ServiceConfig serviceConfig = new ServiceConfig();
-        serviceConfig.setGroupName(registerParam.getGroupName());
-        serviceConfig.setEndpoints(newConcurrentHashSet(singleton(registerParam.getHostAndPortText())));
-        serviceConfig.setServices(getServiceNames(fileDescriptorSets));
-        serviceConfig.setSuccess(true);
-        return Result.success(addServiceConfig(serviceConfig));
+        List<String> serviceNames = getServiceNames(fileDescriptorSets);
+        List<ServiceConfig> serviceConfigs = serviceNames.stream()
+                .map(name -> new ServiceConfig(name, registerParam.getHostAndPortText()))
+                .peek(ServiceConfigManager::addServiceConfig)
+                .collect(toList());
+        return Result.success(serviceConfigs);
     }
 }
