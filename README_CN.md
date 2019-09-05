@@ -82,7 +82,7 @@ java -jar grpc-swagger-web/target/grpc-swagger-web-0.0.1-SNAPSHOT.jar --server.p
        .start();
    ```
 3. 注册实例，通过 [register](#注册实例) 将提供服务的实例注册到 gRPC-swagger 上，gRPC-swagger 会自动扫描服务，注册完成之后会返回注册成功的服务。后面可以通过 [listServices](#列出服务) 接口查看注册成功的服务。为了方便使用，[这里](http://ui.grpcs.top/service.html) 提供了一个简单的 html 页面。
-4. 使用 swagger-ui 查看 gRPC 服务，在输入框中输入 `<host:port>/v2/api?service=<fullServiceName>`，其中`fullServiceName` 就是上面返回注册成功的服务。
+4. 使用 [swagger-ui](http://ui.grpcs.top/) 查看 gRPC 服务，在输入框中输入 `<host:port>/v2/api?service=<fullServiceName>`，其中`fullServiceName` 就是上面返回注册成功的服务。
 5. 点击 `Try it out` 进行服务测试
 
 ## 接口
