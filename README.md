@@ -70,7 +70,7 @@ java -jar grpc-swagger-web/target/grpc-swagger.jar --server.port=8888
 
 ### Other parameters
 - `--enable.list.service=(true/false)` - Weather enable list registered services through listServices api. 
-- `--service.expired.seconds=expiredSeconds` - If `expiredSeconds` greater than 0, the registered service will expired after `expiredSeconds` if no access.
+- `--service.expired.seconds=expiredSeconds` - If `expiredSeconds` is greater than 0, the registered service will be expired after `expiredSeconds` if no access.
 
 ## How to use it
 1. Run gRPC-swagger, referring to [Build and Run](#build-and-run) 
