@@ -15,6 +15,7 @@
 - [Build and Run](#build-and-run)
   * [Use released jar](#use-released-jar)
   * [Build from source](#build-from-source)
+  * [Other parameters](#other-parameters)
 - [How to use it](#how-to-use-it)
 - [API](#api)
   * [Register Endpoint](#register-endpoint)
@@ -52,20 +53,24 @@ gRPC-swagger is a [gRPC](https://github.com/grpc/) debuggling tool developed bas
 ## Build and Run
 ### Use released jar
 ```base
-wget https://github.com/grpc-swagger/grpc-swagger/releases/download/0.1.1/grpc-swagger-web-0.0.1-SNAPSHOT.jar
-java -jar grpc-swagger-web-0.0.1-SNAPSHOT.jar
+wget https://github.com/grpc-swagger/grpc-swagger/releases/latest/download/grpc-swagger.jar 
+java -jar grpc-swagger.jar
 ```
 ### Build from source
 ```bash
 mvn clean package
-java -jar grpc-swagger-web/target/grpc-swagger-web-0.0.1-SNAPSHOT.jar
+java -jar grpc-swagger-web/target/grpc-swagger.jar
 ```
 
 By default it will start at port 8080, use `--server.port=yourport` if
 you want to use another port.
 ```bash
-java -jar grpc-swagger-web/target/grpc-swagger-web-0.0.1-SNAPSHOT.jar --server.port=8888
+java -jar grpc-swagger-web/target/grpc-swagger.jar --server.port=8888
 ```
+
+### Other parameters
+- `--enable.list.service=(true/false)` - Weather enable list registered services through listServices api. 
+- `--service.expired.seconds=expiredSeconds` - If `expiredSeconds` greater than 0, the registered service will expired after `expiredSeconds` if no access.
 
 ## How to use it
 1. Run gRPC-swagger, referring to [Build and Run](#build-and-run) 
@@ -86,8 +91,11 @@ java -jar grpc-swagger-web/target/grpc-swagger-web-0.0.1-SNAPSHOT.jar --server.p
        .build()
        .start();
    ``` 
-3. Register endpoint. You can register the endpoint that running gRPC services to gRPC-swagger through the [`register`](#register-endpoint) interface, gRPC-swagger will automatically scan available services and return successful registered services when finished. The registered services can be listed through the [`listServices`](#services-list) interface. For easily using, we have provied a simple html page [here](http://ui.grpcs.top/service.html).
-4. Use swagger-ui to see gRPC services. Input `<host:port>/v2/api?service=<fullServiceName>` at the top input box, and the `fullServiceName` is the successful registed service name above.
+3. Register endpoint. Open [this page](http://ui.grpcs.top/r.html), input necessary message and click register button, gRPC-swagger will automatically scan available services and return successful registered services when finished. You can click service link jump to ui page.
+
+![](doc/screenshots/register.png)
+ 
+4. Use swagger-ui to see gRPC services.
 5. Click `Try it out` button to have a test on the gRPC method.
 
 ## API
@@ -98,22 +106,17 @@ url：`/register`
 parameters：
 * `host` - required, e.g. `localhost`
 * `port` - required, e.g. `12347`
-* `groupName` - optional，default is `host:port`. Endpoints that deploy the same service can be grouped together by specifying a group name.
 
 return example:
 ```json 
 {
-    "code": 0, 
-    "data": {
-        "groupName": "localhost:12347", 
-        "services": [
-            "io.grpc.grpcswagger.showcase.HelloService"
-        ], 
-        "endpoints": [
-            "localhost:12347"
-        ], 
-        "success": true
-    }
+    "code": 1,
+    "data": [
+        {
+            "service": "io.grpc.grpcswagger.showcase.HelloService",
+            "endPoint": "localhost:12347"
+        }
+    ]
 }
 ```
 
@@ -123,19 +126,13 @@ url: `/listServices`
 return example:
 ```json 
 {
-    "code": 0,
-    "data": {
-        "localhost:12347": {
-            "groupName": "localhost:12347",
-            "services": [
-                "io.grpc.grpcswagger.showcase.HelloService"
-            ],
-            "endpoints": [
-                "localhost:12347"
-            ],
-            "success": true
+    "code": 1,
+    "data": [
+        {
+            "service": "io.grpc.grpcswagger.showcase.HelloService",
+            "endPoint": "localhost:12347"
         }
-    }
+    ]
 }
 ```
 

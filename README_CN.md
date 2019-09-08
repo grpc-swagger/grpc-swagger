@@ -14,6 +14,7 @@
 - [部署运行](#%E9%83%A8%E7%BD%B2%E8%BF%90%E8%A1%8C)
   * [使用打包好的jar包](#%E4%BD%BF%E7%94%A8%E6%89%93%E5%8C%85%E5%A5%BD%E7%9A%84jar%E5%8C%85)
   * [编译构建](#%E7%BC%96%E8%AF%91%E6%9E%84%E5%BB%BA)
+  * [其他参数](#%E5%85%B6%E4%BB%96%E5%8F%82%E6%95%B0)
 - [使用流程](#%E4%BD%BF%E7%94%A8%E6%B5%81%E7%A8%8B)
 - [接口](#%E6%8E%A5%E5%8F%A3)
   * [注册实例](#%E6%B3%A8%E5%86%8C%E5%AE%9E%E4%BE%8B)
@@ -61,6 +62,9 @@ java -jar grpc-swagger-web/target/grpc-swagger-web-0.0.1-SNAPSHOT.jar
 ```bash
 java -jar grpc-swagger-web/target/grpc-swagger-web-0.0.1-SNAPSHOT.jar --server.port=8888
 ```
+### 其他参数
+- `--enable.list.service=(true/false)` - 是否允许 listServices 接口列出当前注册的服务。 
+- `--service.expired.seconds=expiredSeconds` - 如果 `expiredSeconds` 大于0，注册的服务如果 `expiredSeconds` 时间内不返回就会过期。
 
 ## 使用流程
 1. 运行 gRPC-swagger，具体参考[部署运行](#部署运行)
@@ -81,7 +85,10 @@ java -jar grpc-swagger-web/target/grpc-swagger-web-0.0.1-SNAPSHOT.jar --server.p
        .build()
        .start();
    ```
-3. 注册实例，通过 [register](#注册实例) 将提供服务的实例注册到 gRPC-swagger 上，gRPC-swagger 会自动扫描服务，注册完成之后会返回注册成功的服务。后面可以通过 [listServices](#列出服务) 接口查看注册成功的服务。为了方便使用，[这里](http://ui.grpcs.top/service.html) 提供了一个简单的 html 页面。
+3. 注册实例。打开 [注册页面](http://ui.grpcs.top/r.html)，输入grpc-swagger 地址和 gprc 服务地址，点击注册按钮，会列出当前所有注册的service，点击service可以跳转到对应的ui页面。
+
+![](doc/screenshots/register.png)
+
 4. 使用 swagger-ui 查看 gRPC 服务，在输入框中输入 `<host:port>/v2/api?service=<fullServiceName>`，其中`fullServiceName` 就是上面返回注册成功的服务。
 5. 点击 `Try it out` 进行服务测试
 
@@ -93,23 +100,19 @@ url：`/register`
 参数：
 * `host` - 地址（必填）
 * `port` - 端口（必填）
-* `groupName` - 分组名（选填），默认是 `host:port`，通过指定分组名可以将部署相同服务的实例归为一组
+
 
 返回示例
 
 ```json 
 {
-    "code": 0, 
-    "data": {
-        "groupName": "localhost:12347", 
-        "services": [
-            "io.grpc.grpcswagger.showcase.HelloService"
-        ], 
-        "endpoints": [
-            "localhost:12347"
-        ], 
-        "success": true
-    }
+    "code": 1,
+    "data": [
+        {
+            "service": "io.grpc.grpcswagger.showcase.HelloService",
+            "endPoint": "localhost:12347"
+        }
+    ]
 }
 ```
 
@@ -120,19 +123,13 @@ url: `/listServices`
 
 ```json 
 {
-    "code": 0,
-    "data": {
-        "localhost:12347": {
-            "groupName": "localhost:12347",
-            "services": [
-                "io.grpc.grpcswagger.showcase.HelloService"
-            ],
-            "endpoints": [
-                "localhost:12347"
-            ],
-            "success": true
+    "code": 1,
+    "data": [
+        {
+            "service": "io.grpc.grpcswagger.showcase.HelloService",
+            "endPoint": "localhost:12347"
         }
-    }
+    ]
 }
 ```
 
