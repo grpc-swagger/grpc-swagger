@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package io.grpc.grpcswagger.demo;
+
+option java_outer_classname = "HelloProto";
+
+message HelloRequest {
+    string name = 1;
+}
+
+message HelloResponse {
+    string result = 1;
+}
+
+service HelloService {
+    rpc HelloWorld (HelloRequest) returns (HelloResponse);
+}

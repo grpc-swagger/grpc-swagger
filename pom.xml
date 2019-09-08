@@ -11,6 +11,7 @@
     <modules>
         <module>grpc-swagger-core</module>
         <module>grpc-swagger-web</module>
+        <module>grpc-swagger-demo</module>
     </modules>
     <packaging>pom</packaging>
 
