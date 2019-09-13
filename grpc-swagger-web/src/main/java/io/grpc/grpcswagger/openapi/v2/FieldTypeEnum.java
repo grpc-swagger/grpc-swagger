@@ -35,6 +35,7 @@ enum FieldTypeEnum {
         typeMap.put(Type.FIXED64, INT64);
         typeMap.put(Type.SINT64, INT64);
         typeMap.put(Type.INT32, INT32);
+        typeMap.put(Type.UINT32, INT32);
         typeMap.put(Type.FIXED32, INT32);
         typeMap.put(Type.SINT32, INT32);
         typeMap.put(Type.FLOAT, FLOAT);
