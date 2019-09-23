@@ -2,6 +2,7 @@ package io.grpc.grpcswagger.openapi.v2;
 
 import static io.grpc.grpcswagger.openapi.v2.OpenApiParser.DEFINITION_REF_PREFIX;
 import static io.grpc.grpcswagger.openapi.v2.OpenApiParser.HTTP_OK;
+import static java.util.Optional.ofNullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,7 +11,13 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
+import org.apache.commons.collections4.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.protobuf.DescriptorProtos.MessageOptions;
 import com.google.protobuf.Descriptors;
+import com.google.protobuf.Descriptors.Descriptor;
 
 import io.grpc.grpcswagger.grpc.ServiceResolver;
 
@@ -22,23 +29,42 @@ public class OpenApiDefinitionHandler {
     
     private final Map<String, DefinitionType> typeLookupTable;
     
+    private static final Logger logger = LoggerFactory.getLogger(OpenApiDefinitionHandler.class);
+    
     public OpenApiDefinitionHandler(Map<String, DefinitionType> typeLookupTable) {
         this.typeLookupTable = typeLookupTable;
     }
     
     public void parseModelTypes(List<Descriptors.FileDescriptor> fileDescriptors) {
         fileDescriptors.forEach(fileDescriptor -> {
-            List<Descriptors.Descriptor> messageTypes = fileDescriptor.getMessageTypes();
+            List<Descriptor> messageTypes = fileDescriptor.getMessageTypes();
             messageTypes.forEach(messageType -> {
-                String fullName = messageType.getFullName();
-                DefinitionType definitionType = new DefinitionType();
-                definitionType.setTitle(messageType.getName());
-                definitionType.setType(FieldTypeEnum.OBJECT.getType());
-                definitionType.setProperties(new HashMap<>());
-                definitionType.setProtocolDescriptor(messageType);
-                typeLookupTable.put(fullName, definitionType);
+                typeLookupTable.put(messageType.getFullName(), buildDefinitionType(messageType));
+                parseNestModelType(messageType.getNestedTypes());
             });
         });
+    }
+    
+    private void parseNestModelType(List<Descriptor> descriptors) {
+        if (CollectionUtils.isEmpty(descriptors)) {
+            return;
+        }
+        descriptors.forEach(d -> {
+            boolean isMap = ofNullable(d.getOptions()).map(MessageOptions::getMapEntry).orElse(false);
+            if (isMap) {
+                return;
+            }
+            typeLookupTable.put(d.getFullName(), buildDefinitionType(d));
+        });
+    }
+    
+    private DefinitionType buildDefinitionType(Descriptor descriptor) {
+        DefinitionType definitionType = new DefinitionType();
+        definitionType.setTitle(descriptor.getName());
+        definitionType.setType(FieldTypeEnum.OBJECT.getType());
+        definitionType.setProperties(new HashMap<>());
+        definitionType.setProtocolDescriptor(descriptor);
+        return definitionType;
     }
     
     /**
@@ -50,7 +76,7 @@ public class OpenApiDefinitionHandler {
      */
     public void processMessageFields() {
         typeLookupTable.forEach((typeName, definitionType) -> {
-            Descriptors.Descriptor protocolDescriptor = definitionType.getProtocolDescriptor();
+            Descriptor protocolDescriptor = definitionType.getProtocolDescriptor();
             Map<String, FieldProperty> properties = definitionType.getProperties();
             List<Descriptors.FieldDescriptor> fields = protocolDescriptor.getFields();
             fields.forEach(fieldDescriptor -> {
@@ -79,8 +105,8 @@ public class OpenApiDefinitionHandler {
     private Operation parseOperation(Descriptors.MethodDescriptor methodDescriptor) {
         Operation operation = new Operation();
         
-        Descriptors.Descriptor inputType = methodDescriptor.getInputType();
-        Descriptors.Descriptor outputType = methodDescriptor.getOutputType();
+        Descriptor inputType = methodDescriptor.getInputType();
+        Descriptor outputType = methodDescriptor.getOutputType();
         
         operation.setDescription(methodDescriptor.getName());
         List<Parameter> parameters = parseParameters(inputType);
@@ -92,7 +118,7 @@ public class OpenApiDefinitionHandler {
         return operation;
     }
     
-    private List<Parameter> parseParameters(Descriptors.Descriptor inputType) {
+    private List<Parameter> parseParameters(Descriptor inputType) {
         List<Parameter> parameters = new ArrayList<>();
         Parameter parameter = new Parameter();
         parameter.setName(inputType.getName());
@@ -103,7 +129,7 @@ public class OpenApiDefinitionHandler {
         return parameters;
     }
     
-    private Map<String, ResponseObject> parseResponse(Descriptors.Descriptor outputType) {
+    private Map<String, ResponseObject> parseResponse(Descriptor outputType) {
         ResponseObject responseObject = new ResponseObject();
         ParameterSchema responseSchema = new ParameterSchema();
         responseSchema.setRef(findRefByType(outputType));
@@ -127,7 +153,7 @@ public class OpenApiDefinitionHandler {
             if (type == Descriptors.FieldDescriptor.Type.MESSAGE
                     && fieldDescriptor.getMessageType().getOptions().getMapEntry()) {
                 fieldProperty.setType(FieldTypeEnum.OBJECT.getType());
-                Descriptors.Descriptor messageType = fieldDescriptor.getMessageType();
+                Descriptor messageType = fieldDescriptor.getMessageType();
                 Descriptors.FieldDescriptor mapValueType = messageType.getFields().get(1);
                 fieldProperty.setAdditionalProperties(parseFieldProperty(mapValueType));
             } else { // array
@@ -162,7 +188,7 @@ public class OpenApiDefinitionHandler {
     }
     
     @Nullable
-    private String findRefByType(Descriptors.Descriptor typeDescriptor) {
+    private String findRefByType(Descriptor typeDescriptor) {
         String fullName = typeDescriptor.getFullName();
         DefinitionType definitionType = typeLookupTable.get(fullName);
         if (definitionType != null) {
