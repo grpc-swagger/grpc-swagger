@@ -4,8 +4,33 @@ package io.grpc.grpcswagger.demo;
 
 option java_outer_classname = "HelloProto";
 
+enum Corpus {
+    UNIVERSAL = 0;
+    WEB = 1;
+    IMAGES = 2;
+    LOCAL = 3;
+    NEWS = 4;
+    PRODUCTS = 5;
+    VIDEO = 6;
+}
+
 message HelloRequest {
     string name = 1;
+    string query = 2;
+    int32 page_number = 3;
+    int32 result_per_page = 4;
+    double double_value = 5;
+    int64 long_value = 6;
+    bool bool_value = 7;
+    bytes bytes = 8;
+    Corpus corpus = 9;
+    message Result {
+        string url = 1;
+        string title = 2;
+        repeated string snippets = 3;
+    }
+    repeated Result results = 10;
+    map<string, Result> projects = 11;
 }
 
 message HelloResponse {

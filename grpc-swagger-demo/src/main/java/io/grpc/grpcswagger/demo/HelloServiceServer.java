@@ -19,7 +19,7 @@ public class HelloServiceServer {
         logger.info("Starting server on port " + DEMO_SERVER_PORT);
         Server server = ServerBuilder.forPort(DEMO_SERVER_PORT)
                 .addService(ProtoReflectionService.newInstance())
-                .addService(new HelloServcieImpl())
+                .addService(new HelloServiceImpl())
                 .build()
                 .start();
         server.awaitTermination();
