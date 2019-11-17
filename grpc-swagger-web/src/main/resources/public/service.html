@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <title>gRPC-Swagger</title>
+
+  <link rel="stylesheet" href="https://unpkg.com/mobi.css/dist/mobi.min.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/mobi-plugin-color/dist/mobi-plugin-color.min.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/mobi-plugin-form/dist/mobi-plugin-form.min.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/mobi-plugin-flexbox/dist/mobi-plugin-flexbox.min.css"/>
+
+  <style type="text/css">
+    h2 {
+      border-bottom: 1px solid #EFEAEA;
+      padding-bottom: 10px;
+    }
+
+    input[type="text"] {
+      font-size: 1.5em;
+      height: 2.5em;
+    }
+
+    #services-display {
+      width: 100%;
+      max-height: 500px;
+    }
+
+    td {
+      font-size: 1.3em;
+      line-height: 1.3em;
+    }
+
+    #container table {
+      margin: 0.1em 0;
+    }
+
+    .hide {
+      visibility: hidden;
+    }
+
+  </style>
+</head>
+<body>
+<div class="flex-center">
+  <div class="container" id="container">
+    <article class="site-article unit-1-on-mobile">
+      <h2>Grpc-swagger Server</h2>
+      <div class="form">
+        <div class="flex-left units-gap">
+          <div class="unit"><input type="text" placeholder="url" id="server-base-url"></div>
+        </div>
+      </div>
+
+      <h2>Endpoint Register</h2>
+      <div class="form">
+        <div class="flex-left units-gap">
+          <div class="unit"><input type="text" placeholder="host:port" id="endpoint"></div>
+        </div>
+        <div>
+          <button type="submit" class="btn btn-primary" id="register">Register</button>
+        </div>
+      </div>
+      <h2>Services</h2>
+      <div class="flex-left units-gap" id="services-display-wrapper">
+        <ul id="services-display">
+        </ul>
+      </div>
+    </article>
+  </div>
+</div>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.bootcss.com/jsoneditor/5.26.3/jsoneditor.min.js"></script>
+<script type="text/javascript">
+
+    String.prototype.format = function () {
+        let a = this
+        for (let k in arguments) {
+            a = a.replace("{" + k + "}", arguments[k])
+        }
+        return a
+    }
+    const registerPath = "/register"
+    const baseUrlKey = "baseUrl"
+    const endpointKey = "endpoint"
+    const linkPattern = "<li><a href='index.html?url={0}' target='_blank'>{1}</a></li>"
+    const apiUrl = "{0}/v2/api-docs?service={1}"
+    const scheme = "http://";
+    let serverBaseUrl, endpoint
+
+    $("#register").click(function () {
+        serverBaseUrl = $("#server-base-url").val()
+        if (!serverBaseUrl.startsWith(scheme)) {
+            serverBaseUrl = scheme + serverBaseUrl;
+        }
+        endpoint = $("#endpoint").val()
+        if (isBlank(serverBaseUrl)) {
+            alert("Server url can't be empty!")
+            return
+        }
+        if (isBlank(endpoint)) {
+            alert("Endpoint can't be empty!")
+            return
+        }
+        let texts = endpoint.split(":")
+        if (texts.length !== 2) {
+            alert("Please check endpoint format!")
+            return
+        }
+        localStorage.setItem(baseUrlKey, serverBaseUrl)
+        localStorage.setItem(endpointKey, endpoint)
+        let data = "host=" + texts[0] + "&port=" + texts[1]
+
+        $("#services-display").empty();
+        $.ajax({
+            url: serverBaseUrl + registerPath,
+            type: "POST",
+            data: data,
+            success: function (e) {
+                let services = e.data
+                services.forEach(function (element) {
+                    let url = encodeURIComponent(apiUrl.format(serverBaseUrl, element['service']));
+                    $("#services-display").append(linkPattern.format(url, element['service']));
+                })
+            },
+            error: function (e) {
+                console.error(e)
+                alert("Register failed!")
+            }
+        })
+    })
+
+    $(document).ready(function () {
+        serverBaseUrl = localStorage.getItem(baseUrlKey)
+        endpoint = localStorage.getItem(endpointKey)
+        if (!isBlank(serverBaseUrl)) {
+            $("#server-base-url").val(serverBaseUrl)
+        }
+        if (!isBlank(endpoint)) {
+            $("#endpoint").val(endpoint)
+        }
+    })
+
+    function isBlank(text) {
+        return $.trim(text) === ""
+    }
+</script>
+</body>
+</html>
