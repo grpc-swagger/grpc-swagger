@@ -93,11 +93,11 @@
     let serverBaseUrl, endpoint
 
     $("#register").click(function () {
-        serverBaseUrl = $("#server-base-url").val()
+        serverBaseUrl = $.trim($("#server-base-url").val());
         if (!serverBaseUrl.startsWith(scheme)) {
             serverBaseUrl = scheme + serverBaseUrl;
         }
-        endpoint = $("#endpoint").val()
+        endpoint = $.trim($("#endpoint").val());
         if (isBlank(serverBaseUrl)) {
             alert("Server url can't be empty!")
             return
