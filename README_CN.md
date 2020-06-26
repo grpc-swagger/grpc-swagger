@@ -48,19 +48,19 @@ gRPC-swagger 是基于 [gRPC 反射](https://github.com/grpc/grpc/blob/master/do
 ## 部署运行
 ### 使用打包好的jar包
 ```base
-wget https://github.com/grpc-swagger/grpc-swagger/releases/download/0.1.1/grpc-swagger-web-0.0.1-SNAPSHOT.jar
-java -jar grpc-swagger-web-0.0.1-SNAPSHOT.jar
+wget https://github.com/grpc-swagger/grpc-swagger/releases/latest/download/grpc-swagger.jar 
+java -jar grpc-swagger.jar
 ```
 ### 编译构建
 ```bash
 git clone https://github.com/grpc-swagger/grpc-swagger
 cd grpc-swagger
 mvn clean package
-java -jar grpc-swagger-web/target/grpc-swagger-web-0.0.1-SNAPSHOT.jar
+java -jar grpc-swagger-web/target/grpc-swagger.jar
 ```
 默认使用8080端口，如果使用其他端口可以通过`--server.port=端口号`的方式设置
 ```bash
-java -jar grpc-swagger-web/target/grpc-swagger-web-0.0.1-SNAPSHOT.jar --server.port=8888
+java -jar grpc-swagger-web/target/grpc-swagger.jar --server.port=8888
 ```
 ### 其他参数
 - `--enable.list.service=(true/false)` - 是否允许 listServices 接口列出当前注册的服务。 
@@ -91,6 +91,10 @@ java -jar grpc-swagger-web/target/grpc-swagger-web-0.0.1-SNAPSHOT.jar --server.p
 
 4. 使用 swagger-ui 查看 gRPC 服务，在输入框中输入 `<host:port>/v2/api?service=<fullServiceName>`，其中`fullServiceName` 就是上面返回注册成功的服务。
 5. 点击 `Try it out` 进行服务测试
+
+### 参数说明
+- Request：gRPC请求的request参数，JSON格式
+- headers：透传给gRPC的metadata（header）信息，JSON格式，key表示header名称，value表示header的值。
 
 ## 接口
 

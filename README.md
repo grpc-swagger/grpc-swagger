@@ -98,6 +98,10 @@ java -jar grpc-swagger-web/target/grpc-swagger.jar --server.port=8888
 4. Use swagger-ui to see gRPC services.
 5. Click `Try it out` button to have a test on the gRPC method.
 
+### Parameters
+- Request：the request data of gRPC，JSON format.
+- headers：metadata（header）passing to gRPC server，JSON format. Key represent header name，value represent header value.
+
 ## API
 ### Register Endpoint
 
