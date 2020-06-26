@@ -121,11 +121,12 @@ public class GrpcReflectionUtils {
         checkArgument(isNotBlank(methodName), "Method name can't be empty.");
         String fullServiceName = rawMethodName.substring(0, methodSplitPosition);
         int serviceSplitPosition = fullServiceName.lastIndexOf(".");
-        checkArgument(serviceSplitPosition != -1, "No package name found.");
         String serviceName = fullServiceName.substring(serviceSplitPosition + 1);
-        String packageName = fullServiceName.substring(0, serviceSplitPosition);
+        String packageName = "";
+        if (serviceSplitPosition != -1) {
+            packageName = fullServiceName.substring(0, serviceSplitPosition);
+        }
         checkArgument(isNotBlank(serviceName), "Service name can't be empty.");
-        checkArgument(isNotBlank(packageName), "Package name can't be empty.");
         return new GrpcMethodDefinition(packageName, serviceName, methodName);
     }
 }

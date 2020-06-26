@@ -1,5 +1,7 @@
 package io.grpc.grpcswagger.model;
 
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,10 +19,16 @@ public class GrpcMethodDefinition {
     private String methodName;
 
     public String getFullServiceName() {
-        return packageName + "." + serviceName;
+        if (isNotBlank(packageName)) {
+            return packageName + "." + serviceName;
+        }
+        return serviceName;
     }
 
     public String getFullMethodName() {
-        return packageName + "." + serviceName + "/" + methodName;
+        if (isNotBlank(packageName)) {
+            return packageName + "." + serviceName + "/" + methodName;
+        }
+        return serviceName + "/" + methodName;
     }
 }
