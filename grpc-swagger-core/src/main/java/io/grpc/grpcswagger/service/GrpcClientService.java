@@ -25,8 +25,8 @@ import io.grpc.ClientCall;
 import io.grpc.MethodDescriptor.MethodType;
 import io.grpc.grpcswagger.grpc.CompositeStreamObserver;
 import io.grpc.grpcswagger.grpc.DoneObserver;
-import io.grpc.grpcswagger.model.CallParams;
 import io.grpc.grpcswagger.grpc.DynamicMessageMarshaller;
+import io.grpc.grpcswagger.model.CallParams;
 import io.grpc.stub.StreamObserver;
 
 /**

@@ -12,6 +12,7 @@ import io.grpc.Channel;
 import io.grpc.ClientCall;
 import io.grpc.ClientInterceptor;
 import io.grpc.ClientInterceptors.CheckedForwardingClientCall;
+import io.grpc.ManagedChannel;
 import io.grpc.Metadata;
 import io.grpc.Metadata.Key;
 import io.grpc.MethodDescriptor;
@@ -23,18 +24,18 @@ import io.grpc.netty.NettyChannelBuilder;
  */
 public class ChannelFactory {
 
-    public static Channel create(HostAndPort endpoint) {
+    public static ManagedChannel create(HostAndPort endpoint) {
         return create(endpoint, emptyMap());
     }
 
-    public static Channel create(HostAndPort endpoint, Map<String, String> metaDataMap) {
+    public static ManagedChannel create(HostAndPort endpoint, Map<String, Object> metaDataMap) {
         return NettyChannelBuilder.forAddress(endpoint.getHost(), endpoint.getPort())
                 .negotiationType(NegotiationType.PLAINTEXT)
                 .intercept(metadataInterceptor(metaDataMap))
                 .build();
     }
 
-    private static ClientInterceptor metadataInterceptor(Map<String, String> metaDataMap) {
+    private static ClientInterceptor metadataInterceptor(Map<String, Object> metaDataMap) {
         return new ClientInterceptor() {
             @Override
             public <ReqT, RespT> ClientCall<ReqT, RespT> interceptCall(
@@ -45,7 +46,7 @@ public class ChannelFactory {
                     protected void checkedStart(Listener<RespT> responseListener, Metadata headers) {
                         metaDataMap.forEach((k, v) -> {
                             Key<String> mKey = Key.of(k, ASCII_STRING_MARSHALLER);
-                            headers.put(mKey, v);
+                            headers.put(mKey, String.valueOf(v));
                         });
                         delegate().start(responseListener, headers);
                     }
