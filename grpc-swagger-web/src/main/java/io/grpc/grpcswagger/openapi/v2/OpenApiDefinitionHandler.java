@@ -110,9 +110,8 @@ public class OpenApiDefinitionHandler {
         
         operation.setDescription(methodDescriptor.getName());
         List<Parameter> parameters = parseParameters(inputType);
-        
+        parameters.add(buildHeaderParameter());
         Map<String, ResponseObject> response = parseResponse(outputType);
-        
         operation.setParameters(parameters);
         operation.setResponses(response);
         return operation;
@@ -129,18 +128,24 @@ public class OpenApiDefinitionHandler {
         return parameters;
     }
     
+    private Parameter buildHeaderParameter() {
+        QueryParameter parameter = new QueryParameter();
+        parameter.setName("headers");
+        parameter.setDescription("Headers passed to gRPC server");
+        parameter.setType("object");
+        parameter.setRequired(false);
+        return parameter;
+    }
+    
     private Map<String, ResponseObject> parseResponse(Descriptor outputType) {
         ResponseObject responseObject = new ResponseObject();
         ParameterSchema responseSchema = new ParameterSchema();
         responseSchema.setRef(findRefByType(outputType));
         responseObject.setSchema(responseSchema);
-        
         Map<String, ResponseObject> response = new HashMap<>();
         response.put(HTTP_OK, responseObject);
         return response;
     }
-    
-   
     
     private FieldProperty parseFieldProperty(Descriptors.FieldDescriptor fieldDescriptor) {
         Descriptors.FieldDescriptor.Type type = fieldDescriptor.getType();
