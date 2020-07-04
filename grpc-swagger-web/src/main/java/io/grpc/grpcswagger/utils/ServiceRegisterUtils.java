@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.google.common.net.HostAndPort;
 import com.google.protobuf.DescriptorProtos;
@@ -61,6 +62,6 @@ public class ServiceRegisterUtils {
                 serviceNames.add(serviceName);
             });
         });
-        return serviceNames;
+        return serviceNames.stream().distinct().sorted().collect(Collectors.toList());
     }
 }
