@@ -1676,3 +1676,23 @@
 .swagger-ui .download-contents {
   z-index: 999;
 }
+
+.jsoneditor .jsoneditor-menu {
+  height: 25px;
+  padding: 0;
+  margin: 0;
+  line-height: 0.5;
+  background-color: #6c7a86;
+  border-bottom-color: #6c7a86;
+}
+.jsoneditor .jsoneditor-menu>button {
+  margin: 0;
+  line-height: inherit;
+}
+.parameters .jsoneditor {
+  border: 1px solid #6c7a86;
+}
+
+.highlight-code .jsoneditor {
+  border: 1px solid #6c7a86;
+}
