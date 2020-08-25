@@ -9,8 +9,10 @@ import static io.grpc.grpcswagger.utils.ServiceRegisterUtils.registerByIpAndPort
 import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
@@ -79,6 +81,7 @@ public class GrpcController {
     public Result<Object> invokeMethod(@PathVariable String rawFullMethodName,
                                        @RequestBody String payload,
                                        @RequestParam(defaultValue = "{}") String headers) {
+
         GrpcMethodDefinition methodDefinition = parseToMethodDefinition(rawFullMethodName);
         JSONObject jsonObject = JSON.parseObject(payload);
         HostAndPort endPoint;
@@ -93,6 +96,14 @@ public class GrpcController {
         if (endPoint == null) {
             return Result.success("can't find target endpoint");
         }
+
+        if (registeredEndPointSet.contains(endPoint.getHost() + ":" + endPoint.getPort()) == false) {
+            List<FileDescriptorSet> fileDescriptorSets = registerByIpAndPort(endPoint.getHost(), endPoint.getPort());
+//        if (CollectionUtils.isEmpty(fileDescriptorSets)) {
+//            return error("no services find");
+//        }
+        }
+
         Map<String, Object> metaHeaderMap = JSON.parseObject(headers);
         ManagedChannel channel = null;
         try {
@@ -111,8 +122,10 @@ public class GrpcController {
         if (!AppConfig.enableListService()) {
             return Result.error("Not support this action.");
         }
-       return Result.success(getServiceConfigs());
+        return Result.success(getServiceConfigs());
     }
+
+    private Set<String> registeredEndPointSet = new HashSet<String>();
 
     @RequestMapping("/register")
     public Result<Object> registerServices(RegisterParam registerParam) {
@@ -121,6 +134,14 @@ public class GrpcController {
         if (CollectionUtils.isEmpty(fileDescriptorSets)) {
             return error("no services find");
         }
+
+        try {
+            registeredEndPointSet.add(registerParam.getHostAndPortText());
+        }
+        catch (Throwable e) {
+            e.printStackTrace();
+        }
+
         List<String> serviceNames = getServiceNames(fileDescriptorSets);
         List<ServiceConfig> serviceConfigs = serviceNames.stream()
                 .map(name -> new ServiceConfig(name, registerParam.getHostAndPortText()))
