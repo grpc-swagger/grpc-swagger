@@ -19,7 +19,7 @@ enum FieldTypeEnum {
     BOOLEAN("boolean"),
     OBJECT("object"),
     ARRAY("array"),
-    BYTE("byte"), // FIXME 这个验证下
+    BYTE("string", "byte"),
     ENUM("enum");
 
     private final String type;
