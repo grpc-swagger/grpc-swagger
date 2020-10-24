@@ -26,13 +26,15 @@ import io.grpc.grpcswagger.grpc.ServiceResolver;
  * @date 2019-08-24
  */
 public class OpenApiDefinitionHandler {
-    
-    private final Map<String, DefinitionType> typeLookupTable;
-    
+
     private static final Logger logger = LoggerFactory.getLogger(OpenApiDefinitionHandler.class);
-    
+
+    private final Map<String, DefinitionType> typeLookupTable;
+    private final Map<String, Descriptor> typeDescriptorLookupTable;
+
     public OpenApiDefinitionHandler(Map<String, DefinitionType> typeLookupTable) {
         this.typeLookupTable = typeLookupTable;
+        this.typeDescriptorLookupTable = new HashMap<>();
     }
     
     public void parseModelTypes(List<Descriptors.FileDescriptor> fileDescriptors) {
@@ -63,7 +65,7 @@ public class OpenApiDefinitionHandler {
         definitionType.setTitle(descriptor.getName());
         definitionType.setType(FieldTypeEnum.OBJECT.getType());
         definitionType.setProperties(new HashMap<>());
-        definitionType.setProtocolDescriptor(descriptor);
+        typeDescriptorLookupTable.put(descriptor.getFullName(), descriptor);
         return definitionType;
     }
     
@@ -76,13 +78,17 @@ public class OpenApiDefinitionHandler {
      */
     public void processMessageFields() {
         typeLookupTable.forEach((typeName, definitionType) -> {
-            Descriptor protocolDescriptor = definitionType.getProtocolDescriptor();
-            Map<String, FieldProperty> properties = definitionType.getProperties();
-            List<Descriptors.FieldDescriptor> fields = protocolDescriptor.getFields();
-            fields.forEach(fieldDescriptor -> {
-                FieldProperty fieldProperty = parseFieldProperty(fieldDescriptor);
-                properties.put(fieldDescriptor.getName(), fieldProperty);
-            });
+            Descriptor protocolDescriptor = typeDescriptorLookupTable.get(typeName);
+            if (protocolDescriptor == null) {
+                logger.error("ProtocolDescriptor not found for type {}", typeName);
+            } else {
+                Map<String, FieldProperty> properties = definitionType.getProperties();
+                List<Descriptors.FieldDescriptor> fields = protocolDescriptor.getFields();
+                fields.forEach(fieldDescriptor -> {
+                    FieldProperty fieldProperty = parseFieldProperty(fieldDescriptor);
+                    properties.put(fieldDescriptor.getName(), fieldProperty);
+                });
+            }
         });
     }
     
