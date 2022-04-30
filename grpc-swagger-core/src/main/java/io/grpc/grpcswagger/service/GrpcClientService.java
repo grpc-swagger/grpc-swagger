@@ -54,12 +54,12 @@ public class GrpcClientService {
                 return doneObserver.getCompletionFuture();
             case CLIENT_STREAMING:
                 requestObserver = asyncClientStreamingCall(createCall(callParams), compositeObserver);
-                requests.forEach(responseObserver::onNext);
+                requests.forEach(requestObserver::onNext);
                 requestObserver.onCompleted();
                 return doneObserver.getCompletionFuture();
             case BIDI_STREAMING:
                 requestObserver = asyncBidiStreamingCall(createCall(callParams), compositeObserver);
-                requests.forEach(responseObserver::onNext);
+                requests.forEach(requestObserver::onNext);
                 requestObserver.onCompleted();
                 return doneObserver.getCompletionFuture();
             default:
