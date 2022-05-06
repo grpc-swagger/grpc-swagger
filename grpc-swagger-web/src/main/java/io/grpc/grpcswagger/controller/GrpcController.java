@@ -76,7 +76,7 @@ public class GrpcController {
 
     @SneakyThrows
     @RequestMapping("/{rawFullMethodName}")
-    public Result<Object> invokeMethod(@PathVariable String rawFullMethodName,
+    public String invokeMethod(@PathVariable String rawFullMethodName,
                                        @RequestBody String payload,
                                        @RequestParam(defaultValue = "{}") String headers) {
         GrpcMethodDefinition methodDefinition = parseToMethodDefinition(rawFullMethodName);
@@ -91,14 +91,15 @@ public class GrpcController {
             endPoint = ServiceConfigManager.getEndPoint(fullServiceName);
         }
         if (endPoint == null) {
-            return Result.success("can't find target endpoint");
+            Result<Object> error = error("can't find target endpoint");
+            return JSON.toJSONString(error);
         }
         Map<String, Object> metaHeaderMap = JSON.parseObject(headers);
         ManagedChannel channel = null;
         try {
             channel = ChannelFactory.create(endPoint, metaHeaderMap);
             CallResults results = grpcProxyService.invokeMethod(methodDefinition, channel, DEFAULT, singletonList(payload));
-            return Result.success(results.asJSON()).setEndpoint(endPoint.toString());
+            return JSON.toJSONString(results.asJSON());
         } finally {
             if (channel != null) {
                 channel.shutdown();
