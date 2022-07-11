@@ -85,12 +85,21 @@ java -jar grpc-swagger-web/target/grpc-swagger.jar --server.port=8888
        .build()
        .start();
    ```
-3. 注册实例。打开 [注册页面](http://ui.grpcs.top/r.html)，输入grpc-swagger 地址和 gprc 服务地址，点击注册按钮，会列出当前所有注册的service，点击service可以跳转到对应的ui页面。
+   
+3.生成 GRPC 相关代码
+Maven Project 一栏先后点击
+Plugins/protobuf/protobuf:compile
+Plugins/protobuf/protobuf:compile-custom
+生成 HelloProto.class 和 HelloServiceGrpc.class，使得 HelloServiceImpl.java 和 HelloServiceServer.java 不再报错，能正常编译整个项目。
+
+4.运行项目。
+
+5. 注册实例。打开 [注册页面](http://ui.grpcs.top/r.html)，输入grpc-swagger 地址和 gprc 服务地址，点击注册按钮，会列出当前所有注册的service，点击service可以跳转到对应的ui页面。
 
 ![](doc/screenshots/register.png)
 
-4. 使用 swagger-ui 查看 gRPC 服务，在输入框中输入 `<host:port>/v2/api?service=<fullServiceName>`，其中`fullServiceName` 就是上面返回注册成功的服务。
-5. 点击 `Try it out` 进行服务测试
+6. 使用 swagger-ui 查看 gRPC 服务，在输入框中输入 `<host:port>/v2/api?service=<fullServiceName>`，其中`fullServiceName` 就是上面返回注册成功的服务。
+7. 点击 `Try it out` 进行服务测试
 
 ### 参数说明
 - Request：gRPC请求的request参数，JSON格式
