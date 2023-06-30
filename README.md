@@ -1,3 +1,8 @@
+Subject: Seeking Help with Repository Implementation - Encountering an Issue
+
+Dear @liuzhengyang
+liuzhengyang, I would greatly appreciate your assistance in resolving an issue I'm facing while implementing your repository. Thank you for your support.
+
 # gRPC-swagger
 
 [![Build Status](https://travis-ci.com/grpc-swagger/grpc-swagger.svg?branch=master)](https://travis-ci.com/grpc-swagger/grpc-swagger)
